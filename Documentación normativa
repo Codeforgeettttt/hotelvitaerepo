@@ -1,1 +1,46 @@
+# Normatividad y estándares aplicables — Portal del Huésped, Hotel Vitae
 
+Este documento reúne las normas ISO y la normatividad colombiana relevantes para este proyecto: por un lado, como hotel de alojamiento y hospedaje; por otro, como producto de software que maneja información de huéspedes. No es una certificación ni implica que el hotel o el portal ya cumplan cada punto — es una guía de referencia para que el cliente sepa qué existe y decida qué aplicar.
+
+## 1. Normas de turismo y hotelería (Colombia)
+
+Estas son las que rigen específicamente a un establecimiento de alojamiento y hospedaje (EAH) en Colombia, emitidas por ICONTEC bajo el marco de la Ley 300 de 1996 y la Ley 1558 de 2012 (que hizo obligatorias las normas técnicas sectoriales de turismo sostenible para los prestadores registrados).
+
+| Norma | Qué cubre | Relación con este proyecto |
+|---|---|---|
+| **NTS-TS 002** | Requisitos de sostenibilidad para establecimientos de alojamiento y hospedaje (uso de agua, energía, gestión ambiental y social). | El portal no sustituye esta norma, pero el apartado "Nuestra esencia" (misión, principios) y las reglas del hotel pueden alinearse con los requisitos de gestión y comunicación al huésped que pide la norma. |
+| **NTSH 006** | Clasificación y categorización por estrellas de hoteles. | No aplica directamente al portal, pero es la norma que define qué información básica debe estar visible al huésped (algo que el portal ya centraliza). |
+| **ISO 18513:2021** | Vocabulario estándar de turismo y hotelería (terminología). | Referencia para mantener consistencia en los términos usados en el portal (ej. "huésped", "check-in", "establecimiento de alojamiento"). |
+
+## 2. Normas de calidad y seguridad de la información (software)
+
+Estas aplican al portal como producto digital, no al hotel como negocio.
+
+| Norma | Qué cubre | Relación con este proyecto |
+|---|---|---|
+| **ISO 9001** | Sistema de gestión de calidad: procesos consistentes, mejora continua, trazabilidad de cambios. | El propio flujo que hemos seguido (versión 1 → validación con el cliente → ajustes documentados en este README) es, en la práctica, un ciclo de mejora continua tipo ISO 9001. |
+| **ISO/IEC 27001** | Gestión de seguridad de la información: cómo se protegen los datos sensibles (contraseñas de wifi, números de contacto, datos de huéspedes). | Aplica directamente: la clave de wifi y los datos de contacto que hoy están "a la vista" en el portal deberían, en una versión productiva, entregarse por un canal autenticado (no un HTML público sin control de acceso). Es la primera mejora de seguridad a considerar antes de publicar esto en internet. |
+| **ISO/IEC 25010** | Modelo de calidad de software (usabilidad, seguridad, mantenibilidad, portabilidad). | Ya aplicamos varios de sus criterios sin llamarlos así: mantenibilidad (datos centralizados en `script.js`), usabilidad (accesos con íconos grandes, pensados para pacientes/adultos mayores). |
+
+## 3. Protección de datos personales (Colombia)
+
+No es una norma ISO, pero es **ley obligatoria** y es la más relevante de todas para este proyecto porque el hotel maneja datos de salud de sus huéspedes (según el cartel "Nuestra Esencia": *"confidencialidad de sus documentos de salud"*).
+
+| Norma | Qué exige |
+|---|---|
+| **Ley 1581 de 2012** (Habeas Data) | Toda recolección de datos personales (nombre, documento, información de salud) requiere autorización del titular, una política de tratamiento de datos publicada, y medidas de seguridad para protegerlos. |
+| **Decreto 1377 de 2013** | Reglamenta cómo debe implementarse la Ley 1581 (formularios de autorización, aviso de privacidad). |
+
+**Nota importante:** el Hotel Vitae aclara en su web que *"no brinda tratamientos médicos"*, por lo que **no** aplica la normatividad de habilitación de servicios de salud (Resolución 3100 de 2019 del Ministerio de Salud). Esto lo mantiene como un establecimiento de hospedaje común, no como una IPS — vale la pena mantener esa distinción clara en toda la comunicación, tal como ya lo hace el sitio actual.
+
+## 4. Recomendaciones concretas para este portal
+
+Con base en lo anterior, antes de considerar esta primera versión como "producción":
+
+1. **No dejar datos sensibles (wifi, teléfonos) en un HTML público sin control de acceso** — alinear con ISO/IEC 27001. Idealmente el portal se entrega por un link único por huésped o con autenticación simple.
+2. **Agregar un aviso de tratamiento de datos** si en el futuro el portal llega a pedir datos del huésped (nombre, documento) — alinear con Ley 1581 de 2012.
+3. **Mantener el disclaimer de "no brindamos tratamientos médicos"** visible también dentro del portal, no solo en la web pública, para sostener la distinción legal frente a servicios de salud.
+4. **Seguir versionando los cambios en Git** (como ya se está haciendo) — es, en la práctica, el principio de trazabilidad que pide ISO 9001.
+
+---
+*Documento de referencia informativa, elaborado como apoyo al desarrollo del portal. No constituye asesoría legal ni auditoría de cumplimiento normativo.*
