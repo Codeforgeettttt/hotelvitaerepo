@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portal del Huésped — Hotel Vitae</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Lora:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <img id="logoImg" alt="Hotel Vitae">
+  <span>Hotel Vitae</span>
+  <span class="sede-tag" id="sedeTag" style="display:none;"></span>
+</header>
+
+<main>
+
+  <!-- SELECTOR DE SEDE -->
+  <div class="panel active" id="panel-selector">
+    <h1>¿En qué sede te estás hospedando?</h1>
+    <div class="sede-list" id="sedeList"></div>
+    <p class="note" style="margin-top:16px;">* En producción, cada sede tendría su propio QR/link y este paso se saltaría automáticamente.</p>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="panel" id="panel-dashboard">
+    <h1>¡Bienvenido! ¿Qué necesitas?</h1>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <!-- PANELES DE CONTENIDO -->
+  <div class="panel" id="panel-detail">
+    <button class="back" onclick="showDashboard()">← Volver</button>
+    <div id="detailContent"></div>
+  </div>
+
+</main>
+
+<script src="js/script.js"></script>
+</body>
+</html>
