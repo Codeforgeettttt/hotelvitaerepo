@@ -1,0 +1,70 @@
+# Changelog — Portal del Huésped, Hotel Vitae
+
+Registro de cambios del proyecto. Se ordena de más reciente a más antiguo. Formato inspirado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/).
+
+## [1.3.0] - 2026-09-26
+### Agregado
+- Documento de normatividad (`normatividad/normatividad.md`) con normas ISO y legales aplicables al proyecto.
+- Favicon del portal usando el logo real del hotel.
+
+### Cambiado
+- Íconos del dashboard (wifi, llave, reglas, traslados, comida, emergencias, contacto, guía) reemplazados por los assets reales entregados por el cliente, ubicados en `assets/icons/`.
+- Fuente de los valores numéricos (horarios, wifi) cambiada de monospace a la tipografía de marca (Archivo).
+
+### Corregido
+- Íconos no se mostraban por usar una técnica de recoloreado (`mask-image`) no soportada de forma consistente en todos los navegadores — se simplificó a `<img>` directo.
+
+## [1.2.0] - 2026-09-26
+### Agregado
+- Sección de **Emergencias**: protocolos de sismos e incendios, y teléfonos de emergencia (tomado de carteles físicos del hotel).
+- Botones de WhatsApp individuales por número (Ruta, Reservas) y `mailto:` para el correo de PQRF.
+
+### Cambiado
+- Reglas del hotel: reemplazado el placeholder genérico por el texto real y completo de la "Carta de Derechos y Deberes del Huésped" (5 categorías).
+- Traslados: reemplazado el placeholder por las reglas reales del servicio de transporte (agendamiento, tiempos de espera, qué no cubre).
+- Horarios de alimentación actualizados con los datos reales de los carteles (incluye desayuno para llevar y horario de domingos/festivos).
+- Datos de contacto separados en 3 canales reales: ruta/transporte, reservas y PQRF.
+- Wifi de la Sede Galery actualizado con la red y clave reales; Galerías y Corferias quedan marcadas como pendientes.
+
+### Pendiente / por confirmar con el cliente
+- Wifi real de Sede Galerías y Sede Corferias.
+- Instrucciones de llave/check-in (sin cartel de referencia, redactado como placeholder).
+- Inconsistencia en el horario de agendamiento de ruta (un cartel dice 7am–5pm, otro 6am–5pm).
+- Pasos 7 a 9 del protocolo de incendios (foto del cartel los corta).
+
+## [1.1.0] - 2026-09-26
+### Agregado
+- Nombres, direcciones y horario de atención reales de las 3 sedes (Galery, Galerías, Corferias), tomados de la web pública.
+- Número central de contacto (+57 318 387 4491).
+
+### Estructura
+- Repositorio organizado en carpeta con `index.html`, `css/style.css`, `js/script.js`, `assets/`, `referencia/` y `README.md`.
+
+## [1.0.0] - 2026-09-26
+### Agregado
+- Primer prototipo funcional del Portal del Huésped: selector de sede + 7 accesos (wifi, llave, reglas, traslados, horarios, contacto, guía del huésped), con datos de ejemplo (placeholder).
+- Base de estilo (`referencia/base-estilo-hero.html`) replicando el nav + hero de la web real de Hotel Vitae, para validar paleta de colores y tipografía antes de construir el portal.
+- Logo real del hotel incorporado.
+
+---
+
+## Cómo seguir este changelog
+
+Cada vez que hagas un cambio importante (agregar una sección, corregir un dato, cambiar el diseño), antes de hacer `git commit`:
+
+1. Abre este archivo y agrega una entrada nueva arriba de todo, con el formato `## [versión] - fecha`.
+2. Describe brevemente qué se **agregó**, **cambió** o **corrigió** — no hace falta detalle técnico, con que quede claro para ti (o para el cliente) qué pasó.
+3. Sube el changelog junto con el resto de cambios en el mismo commit: `git add . && git commit -m "..." && git push`.
+
+### Sobre la numeración de versión
+- Sube el último número (`1.3.0` → `1.3.1`) para una corrección pequeña.
+- Sube el número del medio (`1.3.0` → `1.4.0`) cuando agregas algo nuevo (una sección, una función).
+- Sube el primer número (`1.x.x` → `2.0.0`) cuando hay un cambio grande de estructura (por ejemplo, si más adelante el portal pasa a tener autenticación real por huésped).
+
+### Opcional: marcar versiones en Git
+Si quieres que cada versión quede "marcada" en el historial de GitHub (no solo en este archivo), puedes usar tags:
+```
+git tag -a v1.3.0 -m "Iconos reales, favicon, normatividad"
+git push origin v1.3.0
+```
+Esto te permite, más adelante, volver exactamente al estado del proyecto en esa versión si algo se rompe.
