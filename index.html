@@ -2,45 +2,132 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://i.ytimg.com; media-src 'self'; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Portal del Huésped — Hotel Vitae</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Lora:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/inicio.css">
+<link rel="stylesheet" href="css/videos.css">
+<link rel="stylesheet" href="css/detalle.css">
+<link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/secciones.css">
+<link rel="stylesheet" href="css/accesibilidad.css">
+<link rel="stylesheet" href="css/servicios.css">
+<link rel="stylesheet" href="css/mapa.css">
 <link rel="icon" type="image/png" href="assets/logo_vitae.png">
 </head>
-<body>
+<body data-view="selector">
+<noscript><p style="padding:16px;font-family:sans-serif">Este portal necesita JavaScript. Actívalo en tu navegador o pide ayuda en recepción.</p></noscript>
 
-<header>
-  <img id="logoImg" alt="Hotel Vitae">
-  <span>Hotel Vitae</span>
-  <span class="sede-tag" id="sedeTag" style="display:none;"></span>
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#inicio" data-act="go" data-args='["inicio"]\' aria-label="Hotel Vitae, ir al inicio">
+      <img id="logoImg" width="28" height="28" alt=""><span>Hotel Vitae</span>
+    </a>
+
+    <nav id="mainNav" class="nav" aria-label="Secciones del portal" hidden>
+      <a href="#inicio" data-nav="inicio" data-act="go" data-args='["inicio"]\'>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg><span>Inicio</span></a>
+      <a href="#d-videos" data-nav="d-videos" data-act="go" data-args='["d-videos"]\'>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9.5v5l4.5-2.5z"/></svg><span>Videos</span></a>
+      <a href="#d-guia" data-nav="d-guia" data-act="go" data-args='["d-guia"]\'>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h6a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4zM20 5h-6a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h6z"/></svg><span>Guía</span></a>
+      <a href="#d-contacto" data-nav="d-contacto" data-act="go" data-args='["d-contacto"]\'>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg><span>Contacto</span></a>
+    </nav>
+
+    <div class="top-actions">
+      <button id="a11yBtn" class="a11y-btn" data-act="openA11y" aria-label="Accesibilidad: tamaño de letra y contraste"><span aria-hidden="true">Aa</span></button>
+      <button id="sedeChip" class="sede-chip" data-act="changeSede" hidden aria-label="Cambiar de sede">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        <span id="sedeChipName"></span><em>Cambiar</em>
+      </button>
+      <button id="sosBtn" class="sos" data-act="openDetail" data-args='["emergencias"]' aria-label="Emergencias" hidden>
+        <img src="assets/icons/emergency.png" alt=""><span>Emergencias</span>
+      </button>
+    </div>
+  </div>
 </header>
 
-<main>
+<main id="main">
 
-  <!-- SELECTOR DE SEDE -->
-  <div class="panel active" id="panel-selector">
-    <h1>¿En qué sede te estás hospedando?</h1>
+  <!-- 1 · BIENVENIDA + IDENTIFICACIÓN DE SEDE (temporal: selección manual; luego llegará por QR) -->
+  <div class="panel active wrap narrow" id="panel-selector">
+    <div class="welcome">
+      <img class="welcome-logo" src="assets/logo_vitae.png" width="64" height="57" alt="">
+      <span class="badge">Portal del huésped</span>
+      <h1>Bienvenido a Hotel Vitae</h1>
+      <p>Elige tu sede para ver la información de tu estadía: videos, wifi, alimentación, transporte y más.</p>
+    </div>
     <div class="sede-list" id="sedeList"></div>
-    <p class="note" style="margin-top:16px;">* En producción, cada sede tendría su propio QR/link y este paso se saltaría automáticamente.</p>
+    <p class="proto-note" id="sedeNote" hidden>Selección temporal para pruebas. En producción, el QR de cada habitación abrirá el portal ya en su sede y este paso no aparecerá.</p>
   </div>
 
-  <!-- DASHBOARD -->
-  <div class="panel" id="panel-dashboard">
-    <h1>¡Bienvenido! ¿Qué necesitas?</h1>
-    <div class="grid" id="grid"></div>
-  </div>
+  <!-- 2 · INICIO -->
+  <div class="panel wrap" id="panel-home"><div id="homeContent"></div></div>
 
-  <!-- PANELES DE CONTENIDO -->
-  <div class="panel" id="panel-detail">
-    <button class="back" onclick="showDashboard()">← Volver</button>
-    <div id="detailContent"></div>
-  </div>
+  <!-- 3 · BIBLIOTECA DE VIDEOS -->
+  <div class="panel wrap" id="panel-videos"><div id="videosContent"></div></div>
+
+  <!-- 4 · DETALLE DE CADA SECCIÓN -->
+  <div class="panel wrap narrow" id="panel-detail"><div id="detailContent"></div></div>
 
 </main>
 
-<script src="js/script.js"></script>
+<!-- Accesibilidad -->
+<dialog id="a11yDlg" aria-labelledby="a11yTitle">
+  <div class="vm-head"><h2 id="a11yTitle" class="h-sm" style="margin:0">Accesibilidad</h2>
+    <button class="vm-close" data-act="closeA11y" aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="a11y-body">
+    <b class="a11y-l">Tamaño de letra</b>
+    <div class="seg" role="group" aria-label="Tamaño de letra">
+      <button data-a11y-t="0" aria-pressed="true" data-act="setTexto" data-args='[0]' style="font-size:1rem">A</button>
+      <button data-a11y-t="1" aria-pressed="false" data-act="setTexto" data-args='[1]' style="font-size:1.2rem">A</button>
+      <button data-a11y-t="2" aria-pressed="false" data-act="setTexto" data-args='[2]' style="font-size:1.45rem">A</button>
+    </div>
+    <button class="setfest" id="a11yContrast" aria-pressed="false" data-act="toggleA11y" data-args='["c"]'><span class="sw"></span>Alto contraste</button>
+    <button class="setfest" id="a11yMotion" aria-pressed="false" data-act="toggleA11y" data-args='["m"]'><span class="sw"></span>Menos movimiento</button>
+    <button class="btn-ghost" data-act="resetA11y">Restablecer</button>
+  </div>
+</dialog>
+
+<!-- Reproductor de video -->
+<dialog id="vmodal" aria-labelledby="vmTitle">
+  <div class="vm-head"><span class="badge" id="vmCat"></span>
+    <button class="vm-close" data-act="closeVideo" aria-label="Cerrar video"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="vm-media" id="vmMedia"></div>
+  <div class="vm-body"><h2 id="vmTitle"></h2><p id="vmDesc"></p><div id="vmLink"></div></div>
+  <div class="vm-nav">
+    <button class="btn-ghost" id="vmPrev" data-act="stepModal" data-args='[-1]'>← Anterior</button>
+    <span id="vmCount"></span>
+    <button class="btn-ghost" id="vmNext" data-act="stepModal" data-args='[1]'>Siguiente →</button>
+  </div>
+</dialog>
+
+<script src="js/config.js" defer></script>
+<script src="js/core/utils.js" defer></script>
+<script src="js/data/portal.js" defer></script>
+<script src="js/data/contenido.js" defer></script>
+<script src="js/data/videos.js" defer></script>
+<script src="js/data/mapa-galery.js" defer></script>
+<script src="js/core/router.js" defer></script>
+<script src="js/features/videos.js" defer></script>
+<script src="js/features/home.js" defer></script>
+<script src="js/features/comidas.js" defer></script>
+<script src="js/features/traslados.js" defer></script>
+<script src="js/features/reglas.js" defer></script>
+<script src="js/features/emergencias.js" defer></script>
+<script src="js/features/guia.js" defer></script>
+<script src="js/features/mapa.js" defer></script>
+<script src="js/features/a11y.js" defer></script>
+<script src="js/features/detalle.js" defer></script>
+<script src="js/core/acciones.js" defer></script>
+<script src="js/main.js" defer></script>
 </body>
 </html>

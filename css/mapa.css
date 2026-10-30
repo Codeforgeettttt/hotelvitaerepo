@@ -1,0 +1,252 @@
+/* Mapa de evacuación. */
+/* ---------- mapa de evacuación ---------- */
+.rchips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 12px;
+}
+.rchips button {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 9px 14px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 42px;
+  color: var(--txt);
+}
+.rchips button[aria-pressed='true'] {
+  background: var(--p);
+  border-color: var(--p);
+  color: #fff;
+}
+.map-wrap {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin: 0 0 10px;
+}
+.map-scroll {
+  overflow-x: auto;
+  padding: 8px;
+}
+.map-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.map-wrap.zoom .map-svg {
+  width: 210%;
+}
+.map-zoom {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  background: var(--surface);
+  z-index: 1;
+}
+.map-svg text {
+  font-family: Archivo, sans-serif;
+  pointer-events: none;
+  text-anchor: middle;
+}
+.m-corr {
+  fill: var(--psoft);
+}
+.m-room {
+  fill: var(--surface);
+  stroke: var(--txt);
+  stroke-width: 3;
+}
+.m-deco {
+  fill: var(--bg);
+  stroke-width: 2;
+}
+.m-t {
+  font-size: 42px;
+  font-weight: 600;
+  fill: var(--txt);
+}
+.m-s {
+  font-size: 24px;
+  fill: var(--txt2);
+}
+.m-sb {
+  font-size: 26px;
+  font-weight: 600;
+  fill: var(--txt);
+}
+.m-btn {
+  cursor: pointer;
+}
+.m-btn:hover .m-room {
+  fill: var(--psoft);
+}
+.m-btn:focus-visible {
+  outline: none;
+}
+.m-btn:focus-visible .m-room {
+  stroke: var(--p);
+  stroke-width: 6;
+}
+.m-btn.sel .m-room {
+  fill: var(--psoft);
+  stroke: var(--p);
+  stroke-width: 6;
+}
+.m-street {
+  font-size: 26px;
+  fill: var(--txt2);
+}
+.m-exit rect {
+  fill: var(--ok);
+}
+.m-exit text {
+  font-size: 20px;
+  font-weight: 600;
+  fill: #fff;
+}
+.m-exit.hot rect {
+  stroke: var(--txt);
+  stroke-width: 4;
+}
+.m-pe circle {
+  fill: var(--ok);
+}
+.m-pe text {
+  font-size: 20px;
+  font-weight: 600;
+  fill: #fff;
+}
+.m-pe.hot circle {
+  stroke: var(--txt);
+  stroke-width: 5;
+}
+.m-ext rect {
+  fill: var(--no);
+}
+.m-ext path {
+  stroke: #fff;
+  stroke-width: 4;
+  stroke-linecap: round;
+  fill: none;
+}
+.m-sani .bq {
+  fill: var(--no);
+}
+.m-sani path {
+  stroke: #fff;
+  stroke-width: 5;
+  stroke-linecap: round;
+  fill: none;
+}
+.m-route {
+  fill: none;
+  stroke: var(--p);
+  stroke-width: 12;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 26 20;
+  animation: mflow 0.9s linear infinite;
+  pointer-events: none;
+}
+.m-route.red {
+  stroke: var(--no);
+}
+@keyframes mflow {
+  to {
+    stroke-dashoffset: -46;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .m-route {
+    animation: none;
+  }
+}
+.m-me circle:first-child {
+  fill: var(--txt);
+}
+.m-me path {
+  fill: #fff;
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 0 0 12px;
+  font-size: 0.8rem;
+  color: var(--txt2);
+}
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.lg {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  display: inline-block;
+}
+.lg.ex {
+  background: var(--ok);
+}
+.lg.pe {
+  background: var(--ok);
+  border-radius: 50%;
+}
+.lg.ft {
+  background: var(--no);
+}
+.rsteps {
+  margin: 0 0 4px;
+  padding-left: 22px;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: var(--txt);
+}
+.rsteps li + li {
+  margin-top: 6px;
+}
+.mapcard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--pborder);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin: 0 0 10px;
+  cursor: pointer;
+  min-height: 60px;
+  color: var(--txt);
+}
+.mapcard:hover {
+  border-color: var(--p);
+  background: var(--psoft);
+}
+.mapcard-e {
+  font-size: 1.6rem;
+}
+.mapcard b {
+  display: block;
+  font-size: 0.95rem;
+}
+.mapcard small {
+  color: var(--txt2);
+  font-size: 0.82rem;
+}
+.mapcard > svg {
+  width: 18px;
+  height: 18px;
+  margin-left: auto;
+  color: var(--p);
+  flex-shrink: 0;
+}

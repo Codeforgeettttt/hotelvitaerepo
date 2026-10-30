@@ -1,0 +1,14 @@
+Los 11 videos ya estan incluidos (comprimidos a 720p, MP4 H.264, ~28 MB en total).
+video-01.mp4  Bienvenida, horarios y reglas
+video-02.mp4  Ingreso, documentos y registro
+video-03.mp4  Horarios, comedor y lavanderia
+video-04.mp4  Convivencia y prohibiciones
+video-05.mp4  Tu habitacion, aseo y cuidado
+video-06.mp4  Salud, menores y visitas
+video-07.mp4  Transporte
+video-08.mp4  PQRS
+video-09.mp4  Seguridad sismos, incendios y evacuacion
+video-10.mp4  Salida, emergencias, sedes y servicios
+video-11.mp4  Bienestar (solo sede Galery)
+Las portadas estan en assets/posters/ (mismo numero). Para cambiar un video, reemplaza el archivo conservando el nombre.
+Las duraciones que muestran las tarjetas estan en DURS (js/script.js): actualizalas si cambias un video.

@@ -2,6 +2,92 @@
 
 Registro de cambios del proyecto. Se ordena de más reciente a más antiguo. Formato inspirado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/).
 
+## [2.6.0] - 2026-10-30
+### Cambiado
+- Los 34 manejadores `onclick`/`onchange`/`oninput`/`onerror` pasaron a eventos delegados (`data-act` + `js/core/acciones.js`). Sin cambios visibles.
+- `css/style.css` se dividió en 10 archivos por tema. Se verificó con los estilos calculados de ~24 000 elementos (390 y 1280 px, normal y alto contraste): sin diferencias; después se formateó con Prettier y tampoco hubo diferencias.
+- Funciones largas divididas en piezas: `showHome`, `showVideos`, `mapaSvg`, `renderMapa`, `openDetail` y los renderizadores de `detalle.js`.
+- ESLint calcula los globales del portal leyendo `js/**`, en vez de una lista manual.
+- `logo_vitae.png`: de 276 KB a 17 KB (400 px, paleta). El original quedó en `assets/originales/`.
+
+### Agregado
+- Política CSP en `index.html` (`script-src 'self'`).
+- Pruebas: contraste WCAG AA con axe-core (todas las pantallas, alto contraste y estados ocultos), ausencia de atributos de evento en línea, CSP efectiva, teclado en el plano. Ahora son 33 unitarias y 31 e2e.
+- stylelint para el CSS, `npm run verificar` y Playwright fijado a 1.56.1.
+
+### Corregido
+- Contraste insuficiente (por debajo de 4.5:1): enlaces «Ver los N videos» y «← Inicio», contador de los chips de categoría, etiquetas «Red» y «Contraseña» del wifi y el rótulo «Video de esta sección».
+- `router.js` usaba `vFiltro` sin que ESLint pudiera verlo; el nuevo cálculo de globales lo cubre.
+- Prueba del reproductor inestable (esperaba el evento `close` del diálogo demasiado pronto).
+- `:root` duplicado en el CSS; imágenes con `width`/`height` para evitar saltos de diseño.
+
+## [2.5.0] - 2026-10-30
+### Agregado
+- Mapa de evacuación interactivo (Galery): el huésped toca su habitación y ve su ruta de salida, con salida a elegir, ruta sanitaria (botiquín y camilla), extintores y puntos de encuentro; navegable con teclado.
+- Servicios adicionales (Galery): catálogo Mary Kay, escaneo de piel y nota de compra con Tatiana; incluye el video de Bienestar.
+- Emergencias: pestaña «Al evacuar» con los 8 pasos del plano oficial; se quitó la nota interna de pasos pendientes.
+- Pruebas: 33 unitarias (`npm test`) y 25 de flujos en navegador (`npm run test:e2e`), servidor local sin dependencias, configuración de ESLint, Prettier y EditorConfig, `package.json`.
+
+### Cambiado
+- Refactorización sin cambios visuales: `js/script.js` (778 líneas) se dividió en módulos por responsabilidad (`core/`, `data/`, `features/`, `main.js`). Ver README.
+- `openDetail` pasó de una cadena de 10 `if/else` a una tabla de renderizadores (`DETALLE_VISTAS`).
+- Duraciones de video y rutas de archivos ahora salen del id del video, no de su posición en la lista.
+- Lógica de horarios (`estadoComida`) y de la calculadora de ruta (`calcularRuta`) ahora son funciones puras y probadas.
+- Almacenamiento local centralizado en `almacen`; se eliminaron los `try/catch` vacíos.
+- README reescrito (el anterior estaba desactualizado).
+
+### Corregido
+- Desborde horizontal a 320 px en Traslados (fecha/hora) y en la cuadrícula de teléfonos de Emergencias.
+- Duraciones como «0:60» al redondear segundos.
+- La contraseña de wifi (o cualquier valor a copiar) con comillas habría roto el botón «Copiar»; ahora se lee de `data-copy`.
+- El marcado de «visto» en las tarjetas dependía de una expresión regular sobre el atributo `onclick`; ahora usa `data-vid`.
+- El plano SVG tenía `role="img"`, que oculta los botones de habitación a lectores de pantalla.
+- El reloj del comedor ya no se actualiza con la pestaña oculta.
+- Abrir una sección inexistente o no disponible en la sede (por ejemplo el mapa en Corferias) ahora vuelve al inicio en vez de dejar una pantalla vacía.
+- Se agregó `<noscript>`.
+
+### Eliminado
+- Código sin uso (`teamNote`) y el archivo `js/script.js`.
+
+## [2.1.1] - 2026-10-30
+### Agregado
+- Accesibilidad: botón «Aa» en el encabezado con tamaño de letra (3 niveles), alto contraste y menos movimiento; se recuerda en el dispositivo.
+- Wifi: código QR real (`assets/wifi-galery.png`, formato estándar WIFI:, verificado al decodificarlo) junto a la red y la contraseña. Galerías y Corferias no tienen QR hasta tener su wifi.
+- Subtítulos opcionales por video: `subs:'assets/subs/video-01.vtt'` en `VIDEOS`.
+
+### Cambiado
+- Horario para solicitar la ruta confirmado por el cliente: 7:00 a.m. – 5:00 p.m. (igual en las 3 sedes); se quitó la nota interna de duda.
+- Check-in / Llave y horario de atención son iguales para las 3 sedes (`GLOBAL`). Si se pierde la llave: «avisa de inmediato en recepción» y botón «Avisar a recepción».
+- Wifi: se quitaron los 3 pasos explicativos; solo QR, red y contraseña.
+
+## [2.1.0] - 2026-10-30
+### Agregado
+- Los 11 videos reales en `assets/videos/` (comprimidos de ~900 MB a ~28 MB, 720p) y sus portadas en `assets/posters/`; duraciones fijas en las tarjetas.
+- Alimentación en vivo («Ahora / Siguiente»), calculadora de ruta en Traslados, buscador «¿Se puede…?» en Reglas, pasos marcables en Emergencias, pestañas en Guía.
+- Progreso de videos vistos (se guarda en el dispositivo) y tarjeta «Ahora» del comedor en el inicio.
+
+### Cambiado
+- Wifi, Llave y Contacto pasan de listas a tarjetas con acciones (copiar, llamar, WhatsApp).
+- Cuando una sección tiene varios videos, se pliegan en un solo bloque.
+- Insignia de duración arriba a la izquierda (los videos traen subtítulos abajo).
+
+### Eliminado
+- `copiar-videos.ps1` (ya no hace falta) y la línea «Check-out: coordina con recepción», que no estaba respaldada por ningún dato del cliente.
+
+## [2.0.0] - 2026-10-30
+### Cambiado
+- Flujo: bienvenida con selección de sede → Inicio. Se eliminó la pantalla obligatoria «Antes de comenzar» (carrusel de videos) y el botón «Omitir»; los videos ahora tienen biblioteca propia y son opcionales.
+- Navegación persistente (Inicio, Videos, Guía, Contacto), chip de sede y acceso a Emergencias siempre visibles.
+- Videos organizados en 4 categorías con tarjetas (miniatura, duración, título y descripción) y reproductor en ventana con anterior/siguiente.
+- Reglas y Guía usan secciones desplegables; Emergencias pone primero la llamada y los teléfonos (ahora con enlace `tel:`).
+- Wifi: botones para copiar red y contraseña. Se retiró el QR de ejemplo (no era funcional).
+- Las notas internas («confirmar con el cliente») solo se ven con `CONFIG.modoPrueba = true`.
+- Guía del huésped: ahora incluye Derechos y Deberes (datos que ya existían) y deja de repetir los accesos rápidos.
+
+### Agregado
+- Identificación de sede unificada (`fijarSede`) lista para QR vía `?sede=<slug>`; la sede se recuerda en el dispositivo.
+- Aviso informativo en el inicio (`AVISOS`).
+
 ## [1.3.0] - 2026-09-26
 ### Agregado
 - Documento de normatividad (`normatividad/normatividad.md`) con normas ISO y legales aplicables al proyecto.

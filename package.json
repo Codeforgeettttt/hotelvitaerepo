@@ -1,0 +1,29 @@
+{
+  "name": "hotel-vitae-portal",
+  "version": "2.6.0",
+  "private": true,
+  "description": "Portal del huésped de Hotel Vitae (sitio estático sin paso de compilación).",
+  "scripts": {
+    "start": "node scripts/servir.js",
+    "test": "node --test \"tests/unit/*.test.js\"",
+    "test:e2e": "node tests/e2e/flujos.js",
+    "test:todo": "npm test && npm run test:e2e",
+    "lint": "eslint js tests scripts eslint.config.js && stylelint \"css/*.css\"",
+    "format": "prettier --check \"js/**/*.js\" \"tests/**/*.js\" \"scripts/**/*.js\" \"css/*.css\"",
+    "format:fix": "prettier --write \"js/**/*.js\" \"tests/**/*.js\" \"scripts/**/*.js\" \"css/*.css\"",
+    "verificar": "npm run lint && npm run format && npm test && npm run test:e2e"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "axe-core": "4.10.2",
+    "eslint": "^9.0.0",
+    "globals": "^15.0.0",
+    "playwright": "1.56.1",
+    "prettier": "^3.0.0",
+    "stylelint": "16.26.1",
+    "stylelint-config-recommended": "14.0.1"
+  }
+}

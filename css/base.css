@@ -1,0 +1,67 @@
+/* Base: variables de marca, reinicio y utilidades globales. */
+:root {
+  --p: #147ca9;
+  --pd: #0f6289;
+  --psoft: #e3f3fa;
+  --pborder: #7cc4e0;
+  --bg: #f4f8fb;
+  --surface: #fff;
+  --border: #c9dce8;
+  --txt: #0d1f2d;
+  --txt2: #4a6070;
+  --muted: #8aa3b1;
+  --sh: 0 4px 12px rgba(20, 124, 169, 0.12);
+  --r: 14px;
+  --navh: 64px;
+  /* colores de estado (reglas, avisos y pasos) */
+  --no: #a8342b;
+  --no-bg: #fdeceb;
+  --cond: #8a5a00;
+  --cond-bg: #fff3d1;
+  --ok: #1d7a4a;
+  --ok-bg: #e3f5ea;
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  font-family: Archivo, sans-serif;
+  background: var(--bg);
+  color: var(--txt);
+  -webkit-text-size-adjust: 100%;
+}
+button {
+  font-family: inherit;
+  color: inherit;
+}
+img {
+  max-width: 100%;
+}
+a {
+  color: var(--pd);
+} /* --pd y no --p: el texto del enlace sobre el fondo claro debe pasar 4.5:1 (AA) */
+:focus-visible {
+  outline: 3px solid var(--pborder);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 8px;
+  background: var(--p);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  z-index: 50;
+}
+.skip-link:focus {
+  left: 8px;
+}
+[hidden] {
+  display: none !important;
+}
