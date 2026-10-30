@@ -1,115 +1,480 @@
 # Portal del Huésped — Hotel Vitae
 
-Portal web para el huésped que ya está hospedado: wifi, llave, reglas, transporte, alimentación, emergencias (con mapa de evacuación en Galery), videos tutoriales, servicios adicionales y guía. Se abre desde un QR en la habitación, un enlace por WhatsApp o un botón en la web.
+Portal web informativo para huéspedes alojados en Hotel Vitae. Permite consultar desde el celular, de forma rápida y sencilla, información sobre Wi-Fi, llaves, normas del hotel, transporte, alimentación, emergencias, servicios adicionales y videos tutoriales.
 
-Es un **sitio estático**: HTML, CSS y JavaScript sin framework, sin compilación y sin backend. Esa fue una decisión deliberada (ver «Decisiones de arquitectura»).
+El portal está diseñado para abrirse mediante un código QR ubicado en la habitación, un enlace compartido por WhatsApp o un botón desde la página web del hotel.
+
+## Características principales
+
+- **Información del huésped:** acceso a reglas, horarios, alimentación y servicios disponibles.
+- **Conectividad:** consulta de redes Wi-Fi y acceso al código QR correspondiente.
+- **Videos tutoriales:** biblioteca de videos informativos organizados por categorías y secciones.
+- **Transporte:** información sobre traslados y horarios.
+- **Emergencias:** recomendaciones y mapa esquemático de evacuación para la sede Galery.
+- **Servicios adicionales:** acceso a servicios complementarios, incluidos enlaces de Mary Kay.
+- **Accesibilidad:** opciones de letra grande, alto contraste y reducción del movimiento.
+- **Identificación de sede:** selección automática mediante parámetros de URL o selección manual.
+
+## Tecnologías utilizadas
+
+| Tecnología | Uso |
+|---|---|
+| HTML5 | Estructura y contenido del portal. |
+| CSS3 | Diseño visual, estilos y adaptación a diferentes pantallas. |
+| JavaScript | Navegación, interacciones y funcionalidades. |
+| Node.js | Ejecución de herramientas de desarrollo y servidor local. |
+| Playwright | Pruebas automatizadas de navegación en navegador. |
+| axe-core | Evaluación automatizada de accesibilidad. |
+| ESLint | Análisis estático del código JavaScript. |
+| Stylelint | Validación de los estilos CSS. |
+| Prettier | Formato consistente del código. |
+
+**Arquitectura:** sitio web estático, sin frameworks, procesos de compilación ni backend.
 
 ## Requisitos
 
-| Para | Necesitas |
+| Requisito | Descripción |
 |---|---|
-| Ver el portal | Un navegador moderno. Doble clic en `index.html` funciona; para probar como en producción usa `npm start`. |
-| Ejecutar pruebas y herramientas | Node.js 20 o superior |
-| Pruebas en navegador | Playwright + Chromium (ver abajo) |
+| Navegador | Navegador moderno compatible con HTML5, CSS3 y JavaScript. |
+| Node.js | Versión 20 o superior para las herramientas de desarrollo. |
+| Playwright + Chromium | Necesarios para ejecutar las pruebas automatizadas de navegador. |
 
-Internet solo se usa para las tipografías de Google Fonts (si fallan, el portal usa una fuente del sistema).
+El portal puede abrirse directamente desde `index.html`. Para probarlo mediante un servidor local, se recomienda utilizar `npm start`.
 
-## Instalación y comandos
+La conexión a Internet se utiliza únicamente para cargar las tipografías de Google Fonts. Si no están disponibles, se utiliza una fuente del sistema.
+
+## Instalación y ejecución
+
+### 1. Instalar dependencias
+
+Desde la carpeta raíz del proyecto:
 
 ```bash
-npm install                  # solo hace falta para lint, formato y pruebas e2e
-npm start                    # servidor local en http://localhost:8080
-npm test                     # pruebas unitarias (no necesitan dependencias)
-npx playwright install chromium   # una sola vez, para las pruebas e2e (Playwright va fijado a 1.56.1)
-npm run test:e2e             # flujos completos en navegador real, incluido móvil
-npm run lint                 # ESLint (JS) y stylelint (CSS)
-npm run format               # revisa el formato con Prettier (format:fix lo corrige)
-npm run verificar            # lint + formato + pruebas unitarias + e2e, todo en uno
+npm install
 ```
 
-No hay comando de compilación: lo que está en el repositorio es lo que se publica. **No hay variables de entorno ni credenciales**; el portal no tiene backend. La clave de wifi es información pública para los huéspedes.
+La instalación es necesaria para ejecutar las herramientas de análisis, formato y pruebas E2E.
 
-## Estructura
+### 2. Iniciar el servidor local
 
-```
-index.html                 Estructura, diálogos y orden de carga de los scripts
-css/                       Estilos por tema, cargados en este orden (la cascada depende de él):
-  base.css                 Variables de marca (:root), reinicio y utilidades
-  layout.css               Encabezado, menú de navegación y contenedores
-  inicio.css               Selector de sede, portada, aviso y accesos
-  videos.css               Tarjetas, biblioteca, reproductor y videos por sección
-  detalle.css              Encabezados, acordeones y bloques comunes de detalle
-  responsive.css           Ajustes de escritorio y pantallas pequeñas
-  secciones.css            Pestañas, alimentación, wifi, traslados, reglas, emergencias, contacto, guía
-  accesibilidad.css        Letra grande, alto contraste, menos movimiento
-  servicios.css  mapa.css  Servicios adicionales y mapa de evacuación
-js/
-  config.js                CONFIG (modo prueba), claves de localStorage
-  core/
-    utils.js               Formato, hora de Colombia, almacenamiento seguro, escape de HTML
-    router.js              Identificación de sede (URL/guardada/manual) y navegación por hash
-    acciones.js            ACCIONES y despachador de eventos (reemplaza a los onclick)
-  data/                    Contenido editable, sin lógica
-    portal.js              SEDES, SERVICIOS (enlaces Mary Kay), AVISOS, ITEMS (tarjetas del inicio)
-    contenido.js           GLOBAL (reglas, transporte, emergencias, guía) y «¿Se puede…?»
-    videos.js              VIDEOS y CATEGORIAS
-    mapa-galery.js         Plano de Galery: habitaciones, puertas, salidas
-  features/                Una pantalla o funcionalidad por archivo
-    home.js  videos.js  detalle.js  comidas.js  traslados.js
-    reglas.js  emergencias.js  guia.js  mapa.js  a11y.js
-  main.js                  Arranque: eventos, preferencias y pantalla inicial
-assets/                    logo, íconos, videos (video-NN.mp4), portadas, QR de wifi
-scripts/servir.js          Servidor estático sin dependencias
-tests/unit/                Pruebas de lógica y de integridad de los datos
-tests/e2e/flujos.js        Pruebas de flujos en navegador (Playwright)
+```bash
+npm start
 ```
 
-Los scripts son clásicos (no módulos) y comparten el ámbito global; **el orden en `index.html` importa**: config → utils → data → router → features → acciones → main. Las pruebas leen ese mismo orden desde `index.html`.
+El portal estará disponible en:
 
-## Tareas habituales
+```text
+http://localhost:8080
+```
 
-**Cambiar contenido** (textos, teléfonos, horarios): editar `js/data/`. Los horarios de comida están en `js/features/comidas.js` (`COMIDAS`).
+### 3. Ejecutar las pruebas
 
-**Nueva sede**: una entrada en `SEDES` (`data/portal.js`) con su `slug`, wifi y teléfono. Si tiene videos propios, `sedes:['sX']` en el video. Su QR físico apunta a `index.html?sede=<slug>`. No se toca ningún otro archivo.
+**Pruebas unitarias:**
 
-**Nuevo video**: una línea en `VIDEOS`. Por convención `vN` usa `assets/videos/video-NN.mp4` y `assets/posters/video-NN.jpg`; también admite `yt:'ID'` o `subs:'ruta.vtt'`.
+```bash
+npm test
+```
 
-**Nueva sección**: agregar su entrada en `ITEMS` y su renderizador en `DETALLE_VISTAS` (`features/detalle.js`). Si es solo de algunas sedes, `sedes:[...]`. Una prueba falla si falta alguno de los dos.
+No requieren dependencias adicionales.
 
-**Servicios Mary Kay**: los enlaces están en `SERVICIOS.marykay`. Si un enlace queda vacío, el portal muestra «Enlace pendiente».
+**Instalar Chromium para Playwright:**
 
-**Publicar sin notas internas**: `CONFIG.modoPrueba = false` oculta la nota de «selección temporal» cuando los QR ya estén en producción.
+```bash
+npx playwright install chromium
+```
 
-## Identificación de sede y QR
+Este paso se realiza una sola vez por entorno. La versión de Playwright está fijada en el proyecto (1.56.1).
 
-Todos los caminos terminan en `fijarSede(id, origen)` (`core/router.js`). Hoy se usa el selector manual o `?sede=galery|galerias|corferias`. Cuando existan los QR no hay que reconstruir nada: cada uno solo apunta a la URL con su `?sede=`. Un valor desconocido se ignora y se muestra el selector.
+**Pruebas E2E:**
+
+```bash
+npm run test:e2e
+```
+
+Ejecuta los flujos completos en un navegador real, incluyendo escenarios de visualización móvil.
+
+### 4. Validar calidad y formato
+
+```bash
+npm run lint
+npm run format
+```
+
+- `lint`: analiza JavaScript con ESLint y CSS con Stylelint.
+- `format`: comprueba el formato del código con Prettier.
+
+Para corregir automáticamente los problemas de formato:
+
+```bash
+npm run format:fix
+```
+
+### 5. Verificación completa
+
+Antes de publicar cambios, ejecutar:
+
+```bash
+npm run verificar
+```
+
+Este comando reúne las validaciones del proyecto:
+
+1. ESLint y Stylelint.
+2. Verificación de formato con Prettier.
+3. Pruebas unitarias.
+4. Pruebas E2E.
+
+> **Importante:** el proyecto no necesita un proceso de compilación. Los archivos del repositorio son los mismos que se publican.
+
+## Estructura del proyecto
+
+La organización separa los datos, la lógica y las funcionalidades para facilitar el mantenimiento y permitir incorporar nuevas sedes o secciones sin duplicar código.
+
+```text
+hotelvitae-portal/
+│
+├── index.html
+│
+├── css/
+│   ├── base.css
+│   ├── layout.css
+│   ├── inicio.css
+│   ├── videos.css
+│   ├── detalle.css
+│   ├── responsive.css
+│   ├── secciones.css
+│   ├── accesibilidad.css
+│   ├── servicios.css
+│   └── mapa.css
+│
+├── js/
+│   ├── config.js
+│   ├── main.js
+│   │
+│   ├── core/
+│   │   ├── utils.js
+│   │   ├── router.js
+│   │   └── acciones.js
+│   │
+│   ├── data/
+│   │   ├── portal.js
+│   │   ├── contenido.js
+│   │   ├── videos.js
+│   │   └── mapa-galery.js
+│   │
+│   └── features/
+│       ├── home.js
+│       ├── videos.js
+│       ├── detalle.js
+│       ├── comidas.js
+│       ├── traslados.js
+│       ├── reglas.js
+│       ├── emergencias.js
+│       ├── guia.js
+│       ├── mapa.js
+│       └── a11y.js
+│
+├── assets/
+│   ├── originales/
+│   ├── posters/
+│   ├── videos/
+│   ├── logo_vitae.png
+│   ├── servicios.svg
+│   └── wifi-galery.png
+│
+├── scripts/
+│   └── servir.js
+│
+├── tests/
+│   ├── unit/
+│   └── e2e/
+│       └── flujos.js
+│
+├── Documentación normativa/
+├── .editorconfig
+├── .gitignore
+├── .prettierrc
+├── .stylelintrc.json
+├── eslint.config.js
+├── package.json
+├── package-lock.json
+└── README.md
+```
+
+### Responsabilidad de los archivos principales
+
+| Archivo o directorio | Responsabilidad |
+|---|---|
+| `index.html` | Estructura principal, diálogos y orden de carga de los scripts. |
+| `css/` | Estilos organizados por secciones y funcionalidades. |
+| `js/config.js` | Configuración general y modo de prueba. |
+| `js/core/` | Utilidades, navegación y gestión centralizada de eventos. |
+| `js/data/` | Información editable de sedes, servicios, contenido y videos. |
+| `js/features/` | Implementación de las pantallas y funcionalidades. |
+| `js/main.js` | Inicialización del portal y configuración de eventos. |
+| `assets/` | Recursos gráficos, videos, portadas e imágenes. |
+| `scripts/` | Herramientas auxiliares, incluido el servidor local. |
+| `tests/unit/` | Pruebas de lógica e integridad de datos. |
+| `tests/e2e/` | Pruebas de navegación e interacción en navegador. |
+| `Documentación normativa/` | Documentación de normas y estándares aplicables. |
+
+### Orden de carga de JavaScript
+
+Los scripts utilizan el sistema clásico de JavaScript, sin módulos ES. Por tanto, comparten el ámbito global y su orden de carga en `index.html` es importante:
+
+```text
+config → utils → data → router → features → acciones → main
+```
+
+Las pruebas automatizadas utilizan este mismo orden para validar el funcionamiento del portal.
+
+## Mantenimiento y ampliación
+
+El proyecto está organizado para que las modificaciones habituales se puedan realizar sin afectar innecesariamente otras partes del código.
+
+### Modificar contenido
+
+Para cambiar textos, teléfonos, direcciones o información general, editar los archivos correspondientes dentro de:
+
+```text
+js/data/
+```
+
+Los horarios de alimentación se encuentran en:
+
+```text
+js/features/comidas.js
+```
+
+Dentro de este archivo se encuentra la configuración `COMIDAS`.
+
+### Agregar una nueva sede
+
+Para incorporar una sede:
+
+1. Agregar una entrada en `SEDES`, dentro de `js/data/portal.js`.
+2. Definir su `slug`, información Wi-Fi y teléfono.
+3. Si tiene videos propios, configurar el campo `sedes: ['sX']` en los videos correspondientes.
+4. Generar el QR con la URL de la sede.
+
+No es necesario duplicar las pantallas ni crear una implementación independiente.
+
+### Agregar un nuevo video
+
+Incorporar una entrada en `VIDEOS`, dentro de `js/data/videos.js`.
+
+Por convención, los archivos utilizan la siguiente nomenclatura:
+
+```text
+assets/videos/video-NN.mp4
+assets/posters/video-NN.jpg
+```
+
+También se admiten videos externos de YouTube mediante `yt: 'ID'` y subtítulos mediante `subs: 'ruta.vtt'`.
+
+### Agregar una nueva sección
+
+Para incorporar una sección:
+
+1. Agregar su entrada en `ITEMS`.
+2. Implementar su renderizador en `DETALLE_VISTAS`, dentro de `js/features/detalle.js`.
+3. Si la sección pertenece únicamente a determinadas sedes, especificarlas mediante `sedes: [...]`.
+
+Las pruebas de integridad verifican que cada sección tenga su correspondiente pantalla.
+
+### Configurar servicios adicionales
+
+Los enlaces de los servicios Mary Kay se administran desde:
+
+```text
+SERVICIOS.marykay
+```
+
+Si alguno de los enlaces está vacío, el portal muestra el mensaje «Enlace pendiente».
+
+### Configurar el modo de publicación
+
+En `js/config.js` se encuentra la propiedad:
+
+```js
+CONFIG.modoPrueba = false;
+```
+
+Al desactivar el modo de prueba, se oculta la nota de selección temporal que se utiliza durante las pruebas y la configuración inicial de las sedes.
+
+## Identificación de sede y códigos QR
+
+La identificación de la sede se centraliza en la función:
+
+```js
+fijarSede(id, origen)
+```
+
+Esta función se encuentra en `js/core/router.js`.
+
+Actualmente, el portal permite identificar la sede mediante:
+
+- Selección manual.
+- Parámetro de URL.
+- Sede guardada previamente en el navegador.
+
+Los parámetros admitidos son:
+
+| Sede | Parámetro |
+|---|---|
+| Galery | `galery` |
+| Galerías | `galerias` |
+| Corferias | `corferias` |
+
+Ejemplo de URL:
+
+```text
+index.html?sede=galery
+```
+
+Cuando se implementen los códigos QR físicos, cada uno deberá apuntar a la URL correspondiente con su parámetro `sede`.
+
+Los valores desconocidos se ignoran y el portal muestra el selector de sede.
 
 ## Decisiones de arquitectura
 
-- **Sin framework ni compilación.** El portal es pequeño, se abre desde un QR en celulares y lo mantiene un equipo reducido; un sitio estático se publica en cualquier hosting y no tiene dependencias que actualizar. Si crece mucho (cuentas, reservas, backend), migrar a un framework sería razonable.
-- **Datos separados de la lógica.** Lo que cambia con frecuencia (contenido, sedes, videos) está en `js/data/`; las sedes no se implementan con componentes duplicados sino con datos.
-- **Eventos delegados, sin `onclick`.** El HTML generado marca los elementos con `data-act="nombre"` (helper `da()`/`daEvento()` en `utils.js`) y un solo oyente por tipo de evento en `core/acciones.js` ejecuta `ACCIONES[nombre]`. Para un botón nuevo: agrega la acción en `ACCIONES` y úsala con `da('nombre', arg)`.
-- **Política CSP** (`<meta>` en `index.html`): `script-src 'self'`, sin scripts en línea. Los estilos en línea (`style="…"`) siguen permitidos porque se usan para anchos de barras y tamaños puntuales. Si agregas un servicio externo (analítica, otro CDN), hay que añadirlo a la política o el navegador lo bloqueará.
-- **Plantillas HTML con datos propios.** Todo el texto que se inserta viene de archivos del repositorio; la única entrada externa (`?sede=`) se valida contra la lista de sedes y nunca se inserta en el HTML. Si algún día se muestra texto escrito por usuarios, hay que pasarlo por `esc()`.
-- **Hora de Colombia.** Alimentación y traslados usan `bogota()`, no la hora del dispositivo.
-- **Almacenamiento local** (`almacen`): sede, videos vistos y accesibilidad. Falla en silencio si el navegador lo bloquea.
+Las decisiones técnicas buscan mantener el portal sencillo de desplegar, fácil de mantener y adecuado para su uso desde dispositivos móviles.
 
-## Estado del contenido
+### 1. Sitio estático sin frameworks
 
-| Dato | Estado |
+Se utiliza HTML, CSS y JavaScript nativo, sin frameworks ni procesos de compilación.
+
+Esta decisión responde al tamaño del proyecto, su uso mediante códigos QR y la necesidad de facilitar su mantenimiento por parte de un equipo reducido.
+
+Además, permite publicar el portal en cualquier servicio de hosting estático, sin administrar un backend ni mantener dependencias de ejecución.
+
+Si en el futuro se incorporan funcionalidades complejas, como cuentas de usuario, reservas o gestión de información en servidor, podría evaluarse una migración a un framework.
+
+### 2. Separación de datos y lógica
+
+El contenido que cambia con frecuencia se encuentra en `js/data/`.
+
+Esto permite modificar sedes, servicios, videos y textos sin tener que alterar la lógica de las funcionalidades.
+
+Las sedes comparten las mismas pantallas y se diferencian mediante sus datos de configuración.
+
+### 3. Delegación centralizada de eventos
+
+El proyecto evita el uso de atributos `onclick` en el HTML generado.
+
+En su lugar, utiliza atributos `data-act="nombre"` y un sistema centralizado de acciones.
+
+Los helpers `da()` y `daEvento()` se encuentran en `js/core/utils.js`, mientras que el despachador está en `js/core/acciones.js`.
+
+Las acciones se registran en `ACCIONES` y se ejecutan mediante un único oyente por tipo de evento.
+
+Para agregar una acción nueva, se registra en `ACCIONES` y se utiliza desde el HTML mediante `da('nombre', arg)`.
+
+### 4. Política de seguridad de contenido (CSP)
+
+El archivo `index.html` contiene una política CSP mediante una etiqueta `meta`.
+
+La directiva `script-src 'self'` restringe la carga de scripts a los recursos del propio sitio y evita el uso de scripts en línea.
+
+Los estilos en línea continúan permitidos porque se utilizan para definir anchos de barras y tamaños puntuales.
+
+Si se incorpora un servicio externo, como una herramienta de analítica o un CDN adicional, será necesario revisar y actualizar la política CSP.
+
+### 5. Validación de contenido dinámico
+
+Las plantillas HTML utilizan información procedente de los archivos del repositorio.
+
+La única entrada externa contemplada actualmente es el parámetro `?sede=`, que se valida contra las sedes disponibles antes de utilizarse.
+
+Si en el futuro se incorpora contenido escrito por usuarios, deberá escaparse mediante `esc()` antes de insertarlo en el HTML.
+
+### 6. Manejo de hora y almacenamiento
+
+**Hora de Colombia:** las funcionalidades de alimentación y transporte utilizan `bogota()` para trabajar con la hora de Bogotá y evitar diferencias con la configuración horaria del dispositivo.
+
+**Almacenamiento local:** el helper `almacen` administra las preferencias de sede, videos vistos y opciones de accesibilidad mediante `localStorage`.
+
+Si el navegador bloquea el almacenamiento, el sistema falla de forma silenciosa para evitar interrumpir la navegación.
+
+## Estado actual del contenido
+
+La siguiente tabla identifica qué información está configurada y qué elementos dependen de información pendiente del cliente.
+
+| Elemento | Estado |
 |---|---|
-| Sedes, direcciones, teléfonos, reglas, transporte, alimentación, emergencias | Real |
-| Wifi Galery (con QR) | Real |
-| Wifi Galerías y Corferias | Pendiente del cliente |
-| Mapa de evacuación | Solo Galery, basado en el plano oficial; es esquemático y no está a escala |
-| Servicios adicionales (Mary Kay) | Solo Galery; enlaces del catálogo y del escaneo de piel configurados |
-| Normas y estándares aplicables | Ver `Documentación normativa` |
+| Sedes, direcciones y teléfonos | Configurado con información real. |
+| Reglas, transporte y alimentación | Configurado con información real. |
+| Emergencias | Configurado con información real. |
+| Wi-Fi de Galery | Configurado, incluye código QR. |
+| Wi-Fi de Galerías | Pendiente de información del cliente. |
+| Wi-Fi de Corferias | Pendiente de información del cliente. |
+| Mapa de evacuación | Disponible únicamente para Galery. |
+| Servicios adicionales Mary Kay | Disponibles únicamente para Galery. |
+| Enlaces de catálogo y escaneo de piel | Configurados para Galery. |
+| Documentación normativa | Disponible en `Documentación normativa/`. |
 
-## Para quien mantenga el código
+**Consideración sobre el mapa:** el plano de evacuación de Galery está basado en el plano oficial, pero su representación dentro del portal es esquemática y no está a escala.
 
-- Antes de subir cambios: `npm run verificar`.
-- **Contraste:** el e2e mide WCAG AA con axe-core en todas las pantallas (normal y alto contraste). Si cambias colores y falla, ajusta el color; no desactives la prueba. Lo que axe no puede medir (texto sobre imágenes o video) se revisa a mano.
-- **Imágenes:** `assets/logo_vitae.png` es una versión liviana (400 px, paleta); el original está en `assets/originales/`.
-- Las pruebas de datos revisan que existan los videos, portadas, íconos y QR referenciados, que no haya ids repetidos y que cada sección tenga su pantalla.
-- Los textos visibles y los comentarios están en español.
-- Revisar manualmente en un celular real el reproductor de video (autoplay y pantalla completa varían por navegador).
+## Calidad, pruebas y accesibilidad
+
+La calidad del código y la integridad del contenido se verifican mediante herramientas y pruebas automatizadas.
+
+### Validaciones incluidas
+
+- **ESLint:** identifica problemas y posibles errores en JavaScript.
+- **Stylelint:** valida la estructura y consistencia del CSS.
+- **Prettier:** mantiene un formato uniforme en los archivos.
+- **Pruebas unitarias:** verifican la lógica y la integridad de los datos.
+- **Pruebas E2E:** comprueban los flujos de navegación e interacción.
+- **axe-core:** evalúa criterios automatizables de accesibilidad WCAG AA.
+
+Las pruebas de integridad verifican, entre otros aspectos:
+
+- Existencia de videos, portadas, íconos y códigos QR referenciados.
+- Ausencia de identificadores duplicados.
+- Correspondencia entre las secciones y sus pantallas.
+- Funcionamiento de los flujos principales.
+
+### Recomendaciones para mantener la accesibilidad
+
+- No desactivar las pruebas de accesibilidad cuando aparezcan errores de contraste.
+- Ajustar los colores para cumplir los criterios WCAG AA.
+- Revisar manualmente los textos sobre imágenes y videos, ya que no todos los problemas visuales pueden detectarse automáticamente.
+- Probar las funcionalidades en dispositivos móviles reales.
+
+### Revisión de recursos multimedia
+
+El archivo `assets/logo_vitae.png` corresponde a una versión optimizada de 400 píxeles y con paleta reducida.
+
+El archivo original se conserva en:
+
+```text
+assets/originales/
+```
+
+También se recomienda revisar manualmente el reproductor de video en un celular real, especialmente el comportamiento del autoplay y la pantalla completa, ya que puede variar según el navegador.
+
+## Consideraciones para publicación
+
+Antes de publicar una nueva versión:
+
+1. Revisar los cambios en el contenido y los recursos.
+2. Ejecutar `npm run verificar`.
+3. Comprobar que no existan errores en las pruebas.
+4. Probar la navegación y los videos desde un dispositivo móvil.
+5. Confirmar que los datos pendientes del cliente estén correctamente identificados.
+6. Desactivar el modo de prueba cuando los códigos QR estén listos para producción.
+
+## Seguridad y configuración
+
+El portal no utiliza backend, variables de entorno ni credenciales privadas.
+
+La clave de Wi-Fi se considera información pública para los huéspedes y forma parte del contenido informativo del portal.
+
+La política CSP y las validaciones de entrada ayudan a mantener controlados los recursos y datos que utiliza la aplicación.
+
+---
+
+**Hotel Vitae — Portal del Huésped**
+
+Sitio web estático diseñado para facilitar el acceso a información y servicios del hotel desde cualquier dispositivo.
